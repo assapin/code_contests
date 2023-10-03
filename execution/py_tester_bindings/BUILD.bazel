@@ -8,7 +8,8 @@ load("@pybind11_bazel//:build_defs.bzl", "pybind_extension")
 pybind_extension(
     name = "py_tester_extention", 
     srcs = ["py_tester_sandboxer_bindings.cc"],
-     deps = [
+    tags = ["no-cache"],
+    deps = [
             "//execution:py_tester_sandboxer", 
                                                  
     ],
