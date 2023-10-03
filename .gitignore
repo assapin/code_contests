@@ -1,6 +1,8 @@
 bazel-bin
 bazel-testlogs
 bazel-out
+bazel-io
+**/*/__pycache__/*
 bazel-code_contests
 **/*/build/
 **/*.egg-info/

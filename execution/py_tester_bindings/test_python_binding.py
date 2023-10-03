@@ -9,7 +9,7 @@ print(x)
 
 
 def test_binding(python_310_bin_path, python_310_lib_path):
-    tester = Py3TesterSandboxer(python_310_bin_path, [python_310_lib_path])
+    tester = Py3TesterSandboxer(python_310_bin_path, python_310_lib_path.split(","))
     options = TestOptions()
     options.num_threads = 4
     options.stop_on_first_failure = True
@@ -31,18 +31,15 @@ def test_binding(python_310_bin_path, python_310_lib_path):
 
 if __name__ == '__main__':
 
-    print("Usage: python3.9 test_python_binding.py <path to Python3.10 bin> <path to Python3.10 lib>")
+    print("Usage: python3.9 test_python_binding.py <path to Python3.11 bin> <paths to Python3.11 libs with comma delimiter>")
 
     if not len(sys.argv) ==3:
         print("verify you've read the usage")
         exit(1)
-    
-    print(sys.argv[1])
 
-    print("---")
-    print(sys.argv[2])
 
     test_binding(sys.argv[1], sys.argv[2])
+
 
 
 
