@@ -20,7 +20,7 @@ jobs:
       # Step 3: Run the Docker container with a specific command
     - name: Run Docker container
       run: |
-        docker run -it -e PLAT=manylinux_2_28_x86_64 -v `pwd`:/io code_contests_builder \
+        docker run -it -e PLAT=manylinux_2_28_x86_64 -v ${{ github.workspace }}:/io code_contests_builder \
         bash -c "cd /io && ./execution/py_tester_bindings/build_wheels.sh"    
     - name: Upload artifacts to workflow
       uses: actions/upload-artifact@v2
