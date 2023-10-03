@@ -28,41 +28,11 @@ jobs:
         name: wheel-artifacts
         path: wheelhouse/fixed/*
 
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      with:
-        tag_name: v1.0.0 # static version number
-        release_name: Release v1.0.0
-        draft: false
-        prerelease: false
+    - name: Publish to PyPI
+      run: |
+        python -m pip install twine
+        twine upload wheelhouse/fixed/*.whl
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
 
-    - name: Upload artifacts to GitHub Release
-      uses: actions/github-script@v5
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-        script: |
-          const fs = require('fs');
-          const path = require('path');
-
-          const artifactFolder = './wheelhouse/fixed';
-          const files = fs.readdirSync(artifactFolder);
-
-          for (const file of files) {
-            const filePath = path.join(artifactFolder, file);
-            console.log(`Uploading ${filePath} to release...`);
-
-            const asset = await github.repos.uploadReleaseAsset({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: ${{ steps.create_release.outputs.id }},
-              name: file,
-              data: fs.readFileSync(filePath),
-              headers: {
-                'content-type': 'application/octet-stream',
-                'content-length': fs.statSync(filePath).size,
-              },
-            });
-          }

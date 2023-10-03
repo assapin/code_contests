@@ -23,8 +23,9 @@ for version in $VERSIONS; do
     mkdir -p execution/code_contests_tester/$PY_VERSION
     export PYTHON_BIN_PATH=${PYBIN}/python
     bazel build //execution/py_tester_bindings:py_tester_extention.so --
-    cp bazel-bin/execution/py_tester_bindings/py_tester_extention.so execution/py_tester_bindings/code_contests_tester/py_tester_extention-$PY_VERSION.so
+    cp bazel-bin/execution/py_tester_bindings/py_tester_extention.so execution/py_tester_bindings/code_contests_tester/
     "${PYBIN}/pip" wheel /io/execution/py_tester_bindings --no-deps -w wheelhouse/
+    rm execution/py_tester_bindings/code_contests_tester/py_tester_extention.so
     for file in wheelhouse/*py3-none-any.whl; do
     	mv "$file" "${file%py3-none-any.whl}$PY_VERSION-$PLAT.whl"
     done

@@ -13,7 +13,7 @@ setup(
         'pybind11==2.11.1'
     ],
     package_data={
-        'code_contests_tester': [f'py_tester_extention-{py_version}.so'],
+        'code_contests_tester': [f'py_tester_extention.so'],
     },
 )
 
