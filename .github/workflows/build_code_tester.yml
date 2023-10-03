@@ -15,7 +15,7 @@ jobs:
 
           # Step 2: Build and tag a Docker image
     - name: Build Docker image
-       run: docker build -t code_contests_builder .
+      run: docker build -t code_contests_builder .
 
       # Step 3: Run the Docker container with a specific command
     - name: Run Docker container
