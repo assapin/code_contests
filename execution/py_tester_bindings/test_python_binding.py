@@ -36,11 +36,7 @@ if __name__ == '__main__':
     if not len(sys.argv) ==3:
         print("verify you've read the usage")
         exit(1)
-    
-    print(sys.argv[1])
 
-    print("---")
-    print(sys.argv[2])
 
     test_binding(sys.argv[1], sys.argv[2])
 
