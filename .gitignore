@@ -1,7 +1,9 @@
 bazel-bin
+bazel-io
 bazel-testlogs
 bazel-out
 bazel-code_contests
+wheelhouse/*
 **/*/build/
 **/*.egg-info/
 **/*/dist/

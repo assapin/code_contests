@@ -1,0 +1,68 @@
+name: Build and Publish Artifacts
+
+on:
+  push:
+    branches:
+      - main # Adjust this if you want it to run on a different branch or event
+      - many_linux
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+          # Step 2: Build and tag a Docker image
+    - name: Build Docker image
+       run: docker build -t code_contests_builder .
+
+      # Step 3: Run the Docker container with a specific command
+    - name: Run Docker container
+      run: |
+        docker run -it -e PLAT=manylinux_2_28_x86_64 -v `pwd`:/io code_contests_builder \
+        bash -c "cd /io && ./execution/py_tester_bindings/build_wheels.sh"    
+    - name: Upload artifacts to workflow
+      uses: actions/upload-artifact@v2
+      with:
+        name: wheel-artifacts
+        path: wheelhouse/fixed/*
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        tag_name: v1.0.0 # static version number
+        release_name: Release v1.0.0
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload artifacts to GitHub Release
+      uses: actions/github-script@v5
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+
+          const artifactFolder = './wheelhouse/fixed';
+          const files = fs.readdirSync(artifactFolder);
+
+          for (const file of files) {
+            const filePath = path.join(artifactFolder, file);
+            console.log(`Uploading ${filePath} to release...`);
+
+            const asset = await github.repos.uploadReleaseAsset({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: ${{ steps.create_release.outputs.id }},
+              name: file,
+              data: fs.readFileSync(filePath),
+              headers: {
+                'content-type': 'application/octet-stream',
+                'content-length': fs.statSync(filePath).size,
+              },
+            });
+          }
