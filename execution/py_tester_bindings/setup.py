@@ -10,10 +10,11 @@ setup(
     setup_requires=[
         'setuptools',
         'wheel',
-        'pybind11==2.11.1'
+        'pybind11==2.11.1',
+        'pybind11-stubgen==2.3.6'
     ],
     package_data={
-        'code_contests_tester': [f'py_tester_extention.so'],
+        'code_contests_tester': [f'py_tester_extention.so', 'py_tester_extention.pyi'],
     },
 )
 

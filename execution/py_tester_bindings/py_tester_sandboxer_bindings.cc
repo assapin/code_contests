@@ -54,6 +54,8 @@ PYBIND11_MODULE(py_tester_extention, m) {
     .def(py::init<>())
     .def_readwrite("num_threads", &TestOptions::num_threads)
     .def_readwrite("stop_on_first_failure", &TestOptions::stop_on_first_failure)
+    .def_readwrite("max_execution_duration", &TestOptions::max_execution_duration)
+
     // ... other fields ...
     ;
 
@@ -102,7 +104,5 @@ PYBIND11_MODULE(py_tester_extention, m) {
 
         return result.value();
     });
-    // If there are public methods in the `TesterSandboxer` or `PyTesterSandboxer` 
-    // classes that you want to expose, you can continue the bindings in a similar manner.
 }
 
