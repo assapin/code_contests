@@ -31,6 +31,34 @@
 namespace py = pybind11;
 using namespace deepmind::code_contests;
 
+
+class TestOptionsWrapper : public TestOptions {
+public:
+    using TestOptions::TestOptions; // Inherit constructors
+
+    double get_max_execution_duration_seconds() const {
+        return absl::ToDoubleSeconds(this->max_execution_duration);
+    }
+
+    void set_max_execution_duration_seconds(double seconds) {
+        this->max_execution_duration = absl::Seconds(seconds);
+    }
+};
+
+
+//class ExecutionResultWrapper : public ExecutionResult {
+//public:
+//    using ExecutionResult::ExecutionResult; // Inherit constructors
+//
+//    double get_execution_duration_seconds() const {
+//        return absl::ToDoubleSeconds(this->execution_duration);
+//    }
+//
+//    void set_execution_duration_seconds(double seconds) {
+//        this->execution_duration = absl::Seconds(seconds);
+//    }
+//};
+
 PYBIND11_MODULE(py_tester_extention, m) {
     m.doc() = "Python bindings for py_tester_sandboxer";
     py::register_exception_translator([](std::exception_ptr p) {
@@ -50,14 +78,15 @@ PYBIND11_MODULE(py_tester_extention, m) {
     .value("Timeout", ProgramStatus::kTimeout)
     .export_values();
 
-    py::class_<TestOptions>(m, "TestOptions")
+    py::class_<TestOptionsWrapper>(m, "TestOptions")
     .def(py::init<>())
-    .def_readwrite("num_threads", &TestOptions::num_threads)
-    .def_readwrite("stop_on_first_failure", &TestOptions::stop_on_first_failure)
-    .def_readwrite("max_execution_duration", &TestOptions::max_execution_duration)
+    .def_readwrite("num_threads", &TestOptionsWrapper::num_threads)
+    .def_readwrite("stop_on_first_failure", &TestOptionsWrapper::stop_on_first_failure)
+    .def_property("max_execution_duration",
+                  &TestOptionsWrapper::get_max_execution_duration_seconds,
+                  &TestOptionsWrapper::set_max_execution_duration_seconds);
 
-    // ... other fields ...
-    ;
+
 
 
     py::class_<ExecutionResult>(m, "ExecutionResult")
@@ -66,10 +95,12 @@ PYBIND11_MODULE(py_tester_extention, m) {
         .def_readwrite("program_hash", &ExecutionResult::program_hash)
         .def_readwrite("stdout", &ExecutionResult::stdout)
         .def_readwrite("stderr", &ExecutionResult::stderr)
-        .def_readwrite("execution_duration", &ExecutionResult::execution_duration)
+        //        .def_property("execution_duration",
+        //                  &ExecutionResultWrapper::get_execution_duration_seconds,
+        //                  &ExecutionResultWrapper::set_execution_duration_seconds);
         .def_readwrite("sandbox_result", &ExecutionResult::sandbox_result)
-        .def_readwrite("passed", &ExecutionResult::passed)
-        .def("sandbox_result_status", &ExecutionResult::SandboxResultStatus);
+        .def_readwrite("passed", &ExecutionResult::passed);
+        // .def("sandbox_result_status", &ExecutionResult::SandboxResultStatus);
 
     py::class_<MultiTestResult>(m, "MultiTestResult")
         .def(py::init<>())
@@ -82,7 +113,7 @@ PYBIND11_MODULE(py_tester_extention, m) {
         .def("test", [](Py3TesterSandboxer& self,
                     const std::string& code,
                     const std::vector<std::string>& test_inputs_str,
-                    const TestOptions& test_options,
+                    const TestOptionsWrapper& test_options,
                     const std::vector<std::string>& expected_test_outputs_str,
                     py::function compare_outputs_pyfunc) {
 

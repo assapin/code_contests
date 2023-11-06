@@ -14,7 +14,7 @@ setup(
         'pybind11-stubgen==2.3.6'
     ],
     package_data={
-        'code_contests_tester': [f'py_tester_extention.so', 'py_tester_extention.pyi'],
+        'code_contests_tester': [f'py_tester_extention.so', 'stubs/*.pyi'],
     },
 )
 

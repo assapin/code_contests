@@ -22,7 +22,7 @@ RUN  apt-get update && apt-get install -y \
     vim
 
 
-RUN add-apt-repository ppa:deadsnakes/ppa  && add-apt-repository ppa:deadsnakes/ppa -y
+RUN add-apt-repository ppa:deadsnakes/ppa
 
 RUN apt install python3.9-dev -y
 
@@ -32,6 +32,12 @@ RUN apt install -y python3-pip \
 RUN python3.9 -m pip install --upgrade pip
 
 RUN python3.9 --version
+
+RUN curl -LO "https://github.com/bazelbuild/bazelisk/releases/download/v1.18.0/bazelisk-linux-amd64" \
+    && chmod +x ./bazelisk-linux-amd64 \
+    && mv ./bazelisk-linux-amd64 /usr/local/bin/bazel
+
+
 
 
 
