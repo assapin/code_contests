@@ -16,4 +16,6 @@ $PYBIN -m  pip wheel execution/py_tester_bindings 	--no-deps -w wheelhouse/
 
 #python setup.py sdist bdist_wheel
 $PYBIN -m pip pip install wheelhouse/code_contests_tester-0.1-py3-none-any.whl --force-reinstall
-cp execution/py_tester_bindings/code_contests_tester/
+cp execution/py_tester_bindings/test_python_bindings.py .
+
+$PYBIN  test_python_bindings.py /usr/bin/python3.9 /usr/lib/python3.9
