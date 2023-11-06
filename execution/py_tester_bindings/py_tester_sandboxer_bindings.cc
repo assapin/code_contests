@@ -132,7 +132,7 @@ PYBIND11_MODULE(py_tester_extention, m) {
 
         absl::StatusOr<MultiTestResult> result = self.Test(code, test_inputs, test_options, expected_test_outputs, compare_outputs);
 
-        py::gil_scoped_racquire acquire;
+        py::gil_scoped_acquire acquire;
         if (!result.ok()) {
            throw std::runtime_error(result.status().ToString());
          }
