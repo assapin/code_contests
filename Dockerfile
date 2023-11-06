@@ -1,6 +1,10 @@
 #FROM quay.io/pypa/manylinux_2_28_x86_64
-FROM python:3.9-slim
+FROM ubuntu:22.04
 
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN  apt-get update && apt-get install -y \
     clang \
@@ -13,27 +17,21 @@ RUN  apt-get update && apt-get install -y \
     zlib1g-dev \
     libbz2-dev \
     libreadline-dev \
-    libsqlite3-dev
+    libsqlite3-dev \
+    software-properties-common \
+    vim
 
-# Install pyenv
-RUN curl https://pyenv.run | bash
 
-# Set environment variables for pyenv
-ENV PYENV_ROOT /root/.pyenv
-ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+RUN add-apt-repository ppa:deadsnakes/ppa  && add-apt-repository ppa:deadsnakes/ppa -y
 
-# Install multiple versions of Python
-#RUN pyenv install 3.11
-#RUN pyenv install 3.10
-#RUN pyenv install 3.9
-#RUN pyenv global 3.9
+RUN apt install python3.9-dev -y
 
-# Confirm installation
-RUN python --version
-RUN pyenv versions
-RUN curl -LO "https://github.com/bazelbuild/bazelisk/releases/download/v1.18.0/bazelisk-linux-amd64" \
-    && chmod +x ./bazelisk-linux-amd64 \
-    && mv ./bazelisk-linux-amd64 /usr/local/bin/bazel
+RUN apt install -y python3-pip \
+    python3.9-distutils
+
+RUN python3.9 -m pip install --upgrade pip
+
+RUN python3.9 --version
 
 
 

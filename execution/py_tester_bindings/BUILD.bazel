@@ -10,7 +10,10 @@ pybind_extension(
     srcs = ["py_tester_sandboxer_bindings.cc"],
     tags = ["no-cache"],
     deps = [
-            "//execution:py_tester_sandboxer", 
-                                                 
+            "//execution:py_tester_sandboxer",
+            "//execution:py_locations",
+            "//execution:status_macros",
+            "//execution:tester_sandboxer"
+
     ],
 )
