@@ -8,17 +8,18 @@ print(x)
 """
 
 
-def test_binding(python_310_bin_path, python_310_lib_path):
-    tester = Py3TesterSandboxer(python_310_bin_path, python_310_lib_path.split(","))
+def test_binding(python_bin_path="/usr/bin/python", python_lib_path="/usr/lib/python"):
+    tester = Py3TesterSandboxer(python_bin_path, python_lib_path.split(","))
     options = TestOptions()
     options.num_threads = 4
     options.stop_on_first_failure = True
-
+    input = output = ["hello\n"]
 
     def compare_func(a,b):
         return a==b
 
-    result = tester.test(program, ["hello"], options, ["hello\n"], compare_func)
+    result = tester.test(program, input, options, output, compare_func)
+
     print(f"compilation results:{result.compilation_result.program_status}")
     print(result.compilation_result.sandbox_result)
     print(result.compilation_result.stderr)
@@ -27,6 +28,7 @@ def test_binding(python_310_bin_path, python_310_lib_path):
         print(f"test-{i} :: status={test_res.program_status}, pased={test_res.passed}")
         print("=====================================================================")
         print(test_res.stdout)
+        assert compare_func(test_res.stdout.strip(), output[i])
         print("=====================================================================")
 
 if __name__ == '__main__':

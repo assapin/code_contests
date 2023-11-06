@@ -22,11 +22,29 @@ jobs:
       run: |
         docker run -v ${{ github.workspace }}:/io code_contests_builder \
         bash -c "cd /io && ./execution/py_tester_bindings/make_python_bindings.sh"
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+        architecture: 'x64'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install wheelhouse/*.whl --force-reinstall
+        
+
+    - name: Run tests
+      run: |
+        mkdir test
+        cp execution/py_tester_bindings/test_python_binding.py test/
+        python test/test_python_binding.py /usr/bin/python /usr/lib/python
+
     - name: Upload artifacts to workflow
       uses: actions/upload-artifact@v2
       with:
         name: wheel-artifacts
-        path: wheelhouse/fixed/*
+        path: wheelhouse/*
 
     - name: Publish to PyPI
       run: |
