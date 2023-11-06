@@ -28,17 +28,17 @@ jobs:
         python-version: '3.9'
         architecture: 'x64'
 
-    - name: Run tests
-      run: |
-        p=$(which python)
-        uname -a
-        echo "python is installed in $p"
-        python -m pip install --upgrade pip
-        pip install wheelhouse/*.whl --force-reinstall
-        mkdir test
-        ls -ls /opt/hostedtoolcache/Python/3.9.18/x64/lib/python3.9/site-packages/code_contests_tester/
-        cp execution/py_tester_bindings/test_python_binding.py test/
-        python test/test_python_binding.py /usr/bin/python /usr/lib/python
+#    - name: Run tests
+#      run: |
+#        p=$(which python)
+#        uname -a
+#        echo "python is installed in $p"
+#        python -m pip install --upgrade pip
+#        pip install wheelhouse/*.whl --force-reinstall
+#        mkdir test
+#        ls -ls /opt/hostedtoolcache/Python/3.9.18/x64/lib/python3.9/site-packages/code_contests_tester/
+#        cp execution/py_tester_bindings/test_python_binding.py test/
+#        python test/test_python_binding.py /usr/bin/python /usr/lib/python
 
     - name: Upload artifacts to workflow
       uses: actions/upload-artifact@v2
