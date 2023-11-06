@@ -125,14 +125,14 @@ PYBIND11_MODULE(py_tester_extention, m) {
 
         // Convert py::function to std::function
         std::function<bool(std::string_view a, std::string_view b)> compare_outputs = [&compare_outputs_pyfunc](std::string_view a, std::string_view b) {
-            py::gil_scoped_release acquire;
+            py::gil_scoped_acquire acquire;
             return compare_outputs_pyfunc(a, b).cast<bool>();
         };
         py::gil_scoped_release release;
 
         absl::StatusOr<MultiTestResult> result = self.Test(code, test_inputs, test_options, expected_test_outputs, compare_outputs);
 
-        py::gil_scoped_release acquire;
+        py::gil_scoped_racquire acquire;
         if (!result.ok()) {
            throw std::runtime_error(result.status().ToString());
          }
