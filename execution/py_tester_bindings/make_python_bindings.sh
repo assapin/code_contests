@@ -12,11 +12,11 @@ bazel build //execution/py_tester_bindings:py_tester_extention.so --
 sudo cp bazel-bin/execution/py_tester_bindings/py_tester_extention.so execution/py_tester_bindings/code_contests_tester/
 
 
-cd execution/py_tester_bindings
+#cd execution/py_tester_bindings
 
 #pybind11-stubgen code_contests_tester
 
-cd ../../
+#cd ../../
 
-$PYBIN -m  pip wheel execution/py_tester_bindings       --no-deps -w wheelhouse/
+$PYBIN -m  pip wheel execution/py_tester_bindings  --no-deps -w wheelhouse/
 
