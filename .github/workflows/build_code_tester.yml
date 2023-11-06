@@ -5,6 +5,7 @@ on:
     branches:
       - main # Adjust this if you want it to run on a different branch or event
       - many_linux
+      - ubuntu
 jobs:
   build:
     runs-on: ubuntu-latest
