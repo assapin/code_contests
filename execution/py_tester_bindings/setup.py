@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 py_version = os.environ.get("PY_VERSION")
 setup(
     name="code_contests_tester",
-    version=f"0.1.1",
+    version=f"0.1.5",
     packages=find_packages(),
     setup_requires=[
         'setuptools',
